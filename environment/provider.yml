@@ -1,0 +1,28 @@
+name: aws
+runtime: go1.x
+lambdaHashingVersion: '20201221'
+stage: ${opt:stage,'local'}
+region: ${param:aws-region}
+environment: ${file(./environment/env.yml)}
+versionFunctions: ${param:aws-version-function}
+iam:
+  role: ${env:AWS_DEPLOY_ROLE}
+memorySize: ${param:aws-memory-size}
+tracing: 
+  apiGateway: ${param:aws-tracing-apigateway}
+  lambda: ${param:aws-tracing-lambda}
+vpc:
+  securityGroupIds:
+    - ${env:AWS_SG, 'default-sg'}
+  subnetIds:
+    - ${env:AWS_SUBNET_1, 'default-snet1'}
+    - ${env:AWS_SUBNET_2, 'default-snet2'}
+    - ${env:AWS_SUBNET_3, 'default-snet3'}
+stackTags:
+  env: ${param:environment}
+  service: ${param:service}
+  process: ${param:service}
+tags:
+  env: ${param:environment}
+  service: ${param:service}
+  process: ${param:service}

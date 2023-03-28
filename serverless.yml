@@ -1,0 +1,45 @@
+service: fileit
+frameworkVersion: "3.17.0"
+useDotenv: true
+
+params: ${file(./environment/params.yml)}
+
+provider: ${file(./environment/provider.yml)}
+
+plugins:
+  - serverless-offline
+  - serverless-prune-plugin
+
+custom:
+  serverless-offline:
+    host: 127.0.0.1
+    httpPort: 4000
+  prune:
+    automatic: true
+    number: 3
+
+package:
+  individually: true
+  exclude:
+    - ./.git/**
+    - ./.serverless/**
+    - ./node_modules/**
+    - ./pkg/**
+    - ./bootstrap/**
+    - ./cmd/**
+    - ./.dockers/**
+    - ./.githooks/**
+    - ./bin/**
+
+functions:
+  user-getall:
+    description: Get all users
+    handler: bin/user-getall
+    events:
+      - httpApi:
+          path: /users
+          method: get
+          cors: true
+    package:
+      include:
+        - ./bin/user-getall

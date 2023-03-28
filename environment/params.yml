@@ -1,0 +1,16 @@
+default:
+  vertical: gbl
+  service: notifications
+  #aws
+  aws-bucket-name: gbl-axul-serverless
+  aws-memory-size: 256
+  aws-tracing-apigateway: false
+  aws-tracing-lambda: false
+  aws-version-function: false
+  aws-region: us-east-1
+prod:
+  environment: prod
+  aws-log-retention: 7
+local:
+  environment: local
+  aws-log-retention: 7
