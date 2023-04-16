@@ -84,7 +84,14 @@ func makeCreateEndpoint(s Service) Controller {
 		if err != nil {
 			return nil, response.InternalServerError(err.Error())
 		}
-		return response.OK("success", client, nil, nil), nil
+
+		res := CreateRes{
+			ID:         client.ID,
+			Name:       client.Name,
+			ReadToken:  client.ReadToken,
+			WriteToken: client.WriteToken,
+		}
+		return response.OK("success", res, nil, nil), nil
 	}
 }
 

@@ -1,0 +1,20 @@
+version: "3.5"
+services:
+  fileit-db:
+    platform: linux/amd64
+    container_name: fileit-db
+    build:
+      context: ./.dockers/mysql
+      dockerfile: Dockerfile
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: fileit
+    ports:
+      - "3330:3306"
+    networks:
+      - appnet
+    volumes:
+      - ./.dockers/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+networks:
+  appnet:
+    driver: "bridge"

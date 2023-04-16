@@ -19,14 +19,10 @@ build:
 	env GOOS=linux go build -ldflags="-s -w" -o bin/client-regen 	cmd/client/regen/main.go
 
 start:
+	docker compose up -d
 	make format
 	make build
-	sls offline --useDocker
-
-dev:
-	docker-compose up -d
-	make build
-	sls offline --printOutput
+	sls offline
 
 deploy:
 	make build

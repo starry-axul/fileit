@@ -1,0 +1,25 @@
+on: [push, pull_request]
+name: Test
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.19
+
+      - name: Build
+        run: go build -v ./...
+
+      - name: Test
+        run: go test -v ./...
+
+      - name: Linter
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: v1.49
