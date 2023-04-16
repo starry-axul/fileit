@@ -4,7 +4,7 @@ import (
 	//"os"
 
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/starry-axul/fileit/internal/user"
+	"github.com/starry-axul/fileit/internal/client"
 	//"github.com/starry-axul/fileit/pkg/bootstrap"
 	"github.com/starry-axul/fileit/pkg/handler"
 )
@@ -18,7 +18,7 @@ func main() {
 		os.Exit(-1)
 	}*/
 
-	e := user.MakeEndpoints()
-	h := handler.NewLambdaUserGetAll(e)
+	e := client.MakeEndpoints()
+	h := handler.NewLambdaClientCreate(e)
 	lambda.StartHandler(h)
 }

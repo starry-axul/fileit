@@ -11,12 +11,22 @@ import (
 	"github.com/go-kit/kit/endpoint"
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/transport/awslambda"
-	"github.com/starry-axul/fileit/internal/user"
+	"github.com/starry-axul/fileit/internal/client"
 	"gorm.io/gorm"
 )
 
-func NewLambdaUserGetAll(endpoints user.Endpoints) *awslambda.Handler {
+func NewLambdaClientGetAll(endpoints client.Endpoints) *awslambda.Handler {
 	return awslambda.NewHandler(endpoint.Endpoint(endpoints.GetAll), decodeGetAllHandler, EncodeResponse,
+		HandlerErrorEncoder(nil), awslambda.HandlerFinalizer(HandlerFinalizer(nil)))
+}
+
+func NewLambdaClientCreate(endpoints client.Endpoints) *awslambda.Handler {
+	return awslambda.NewHandler(endpoint.Endpoint(endpoints.Create), decodeCreateHandler, EncodeResponse,
+		HandlerErrorEncoder(nil), awslambda.HandlerFinalizer(HandlerFinalizer(nil)))
+}
+
+func NewLambdaClientRegen(endpoints client.Endpoints) *awslambda.Handler {
+	return awslambda.NewHandler(endpoint.Endpoint(endpoints.Regen), decodeRegenHandler, EncodeResponse,
 		HandlerErrorEncoder(nil), awslambda.HandlerFinalizer(HandlerFinalizer(nil)))
 }
 
@@ -26,12 +36,55 @@ func decodeGetAllHandler(_ context.Context, payload []byte) (interface{}, error)
 		return nil, response.InternalServerError(err.Error())
 	}
 
-	var req user.GetAllReq
-
+	var req client.GetAllReq
+	if err := request.DecodeMap(event.Headers, &req); err != nil {
+		return nil, response.BadRequest(err.Error())
+	}
 	err := request.DecodeMap(event.QueryStringParameters, &req)
 	if err != nil {
 		return nil, response.InternalServerError(err.Error())
 	}
+	return req, nil
+}
+
+func decodeCreateHandler(_ context.Context, payload []byte) (interface{}, error) {
+	var event events.APIGatewayProxyRequest
+	if err := json.Unmarshal(payload, &event); err != nil {
+		return nil, response.InternalServerError(err.Error())
+	}
+
+	var req client.CreateReq
+	if err := request.DecodeMap(event.QueryStringParameters, &req); err != nil {
+		return nil, response.InternalServerError(err.Error())
+	}
+	if err := request.DecodeMap(event.Headers, &req); err != nil {
+		return nil, response.BadRequest(err.Error())
+	}
+	if err := json.Unmarshal([]byte(event.Body), &req); err != nil {
+		return nil, response.BadRequest(err.Error())
+	}
+
+	return req, nil
+}
+
+func decodeRegenHandler(_ context.Context, payload []byte) (interface{}, error) {
+	var event events.APIGatewayProxyRequest
+	if err := json.Unmarshal(payload, &event); err != nil {
+		return nil, response.InternalServerError(err.Error())
+	}
+	
+	var req client.RegenReq
+	if err := json.Unmarshal([]byte(event.Body), &req); err != nil {
+		return nil, response.BadRequest(err.Error())
+	}
+	if err := request.DecodeMap(event.Headers, &req); err != nil {
+		return nil, response.BadRequest(err.Error())
+	}
+	if err := request.DecodeMap(event.PathParameters, &req); err != nil {
+		return nil, response.BadRequest(err.Error())
+	}
+
+
 	return req, nil
 }
 
