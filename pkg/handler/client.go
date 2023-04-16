@@ -9,8 +9,8 @@ import (
 	"github.com/digitalhouse-dev/dh-kit/request"
 	"github.com/digitalhouse-dev/dh-kit/response"
 	"github.com/go-kit/kit/endpoint"
-	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/transport/awslambda"
+	"github.com/go-kit/log"
 	"github.com/starry-axul/fileit/internal/client"
 	"gorm.io/gorm"
 )
@@ -89,9 +89,9 @@ func decodeRegenHandler(_ context.Context, payload []byte) (interface{}, error) 
 
 func EncodeResponse(_ context.Context, resp interface{}) ([]byte, error) {
 	var res response.Response
-	switch resp.(type) {
+	switch r := resp.(type) {
 	case response.Response:
-		res = resp.(response.Response)
+		res = r
 	default:
 		res = response.InternalServerError("unknown response type")
 	}
@@ -120,7 +120,7 @@ func HandlerErrorEncoder(log log.Logger) awslambda.HandlerOption {
 func HandlerFinalizer(log log.Logger) func(context.Context, []byte, error) {
 	return func(ctx context.Context, resp []byte, err error) {
 		if err != nil {
-			log.Log("err", err)
+			_ = log.Log("err", err)
 		}
 	}
 }
@@ -133,14 +133,14 @@ func errorEncoder(log log.Logger) func(context.Context, error) ([]byte, error) {
 }
 
 func buildResponse(err error, log log.Logger) response.Response {
-	switch err.(type) {
+	switch r := err.(type) {
 	case response.Response:
-		return err.(response.Response)
+		return r
 	}
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return response.NotFound("")
 	}
-	log.Log("err", err)
+	_ = log.Log("err", err)
 	return response.InternalServerError("")
 }
