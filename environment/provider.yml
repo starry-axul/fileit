@@ -1,16 +1,11 @@
 name: aws
 runtime: go1.x
-lambdaHashingVersion: '20201221'
+lambdaHashingVersion: "20201221"
 stage: ${opt:stage,'local'}
 region: ${param:aws-region}
 environment: ${file(./environment/env.yml)}
 versionFunctions: ${param:aws-version-function}
-iam:
-  role: ${env:AWS_DEPLOY_ROLE}
 memorySize: ${param:aws-memory-size}
-tracing: 
-  apiGateway: ${param:aws-tracing-apigateway}
-  lambda: ${param:aws-tracing-lambda}
 vpc:
   securityGroupIds:
     - ${env:AWS_SG, 'default-sg'}

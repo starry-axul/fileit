@@ -10,7 +10,9 @@ install:
 	go mod download
 
 build:
-	env GOOS=linux go build -ldflags="-s -w" -o bin/user-getall 	cmd/user/getall/main.go
+	env GOOS=linux go build -ldflags="-s -w" -o bin/client-getall 	cmd/client/getall/main.go
+	env GOOS=linux go build -ldflags="-s -w" -o bin/client-create 	cmd/client/create/main.go
+	env GOOS=linux go build -ldflags="-s -w" -o bin/client-regen 	cmd/client/regen/main.go
 
 start:
 	make build

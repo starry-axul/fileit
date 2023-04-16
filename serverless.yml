@@ -32,14 +32,38 @@ package:
     - ./bin/**
 
 functions:
-  user-getall:
-    description: Get all users
-    handler: bin/user-getall
+  client-getall:
+    description: Get all clients
+    handler: bin/client-getall
     events:
       - httpApi:
-          path: /users
+          path: /clients
           method: get
           cors: true
     package:
       include:
-        - ./bin/user-getall
+        - ./bin/client-getall
+
+  client-create:
+    description: Create a client
+    handler: bin/client-create
+    events:
+      - httpApi:
+          path: /clients
+          method: post
+          cors: true
+    package:
+      include:
+        - ./bin/client-create
+
+  client-regen:
+    description: Regen clients keys
+    handler: bin/client-regen
+    events:
+      - httpApi:
+          path: /clients/{id}/regen
+          method: post
+          cors: true
+    package:
+      include:
+        - ./bin/client-regen
