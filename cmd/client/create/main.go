@@ -1,24 +1,24 @@
 package main
 
 import (
-	//"os"
-
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/starry-axul/fileit/internal/client"
-	//"github.com/starry-axul/fileit/pkg/bootstrap"
+	"github.com/starry-axul/fileit/pkg/bootstrap"
 	"github.com/starry-axul/fileit/pkg/handler"
+	"log"
 )
 
 func main() {
 
-	/*
-	log := bootstrap.InitLogger()
-	db, _, err := bootstrap.ConnectLocal(log)
+	/*log := bootstrap.InitLogger()*/
+	db, _, err := bootstrap.ConnectLocal()
 	if err != nil {
-		os.Exit(-1)
-	}*/
+		log.Fatal(err.Error())
+	}
 
-	e := client.MakeEndpoints()
+	r := client.NewRepository(db)
+	s := client.NewService(r)
+	e := client.MakeEndpoints(s, client.Config{})
 	h := handler.NewLambdaClientCreate(e)
 	lambda.StartHandler(h)
 }

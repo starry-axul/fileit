@@ -1,20 +1,20 @@
 package domain
 
 import (
-	"time"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
+	"time"
 )
 
-//Client model
+// Client model
 type Client struct {
-	ID           string         `json:"id" gorm:"type:char(36);not null;primary_key;unique_index"`
-	Name     string         `gorm:"type:char(70);unique" json:"name"`
-	ReadToken    string         `gorm:"type:char(36);unique" json:"-"`
-	WriteToken     string         `gorm:"type:char(36);unique" json:"-"`
-	CreatedAt    time.Time      `json:"-"`
-	UpdatedAt    time.Time      `json:"-"`
-	DeletedAt    gorm.DeletedAt `json:"-"`
+	ID         string         `json:"id" gorm:"type:char(36);not null;primary_key;unique_index"`
+	Name       string         `gorm:"type:char(70);unique" json:"name"`
+	ReadToken  string         `gorm:"type:char(36);unique" json:"-"`
+	WriteToken string         `gorm:"type:char(36);unique" json:"-"`
+	CreatedAt  time.Time      `json:"-"`
+	UpdatedAt  time.Time      `json:"-"`
+	DeletedAt  gorm.DeletedAt `json:"-"`
 }
 
 func (c *Client) BeforeCreate(tx *gorm.DB) (err error) {

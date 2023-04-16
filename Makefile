@@ -9,12 +9,17 @@ install:
 	go mod tidy
 	go mod download
 
+.PHONY: format
+format:
+	@go fmt ./internal/... ./pkg/... ./cmd/...
+
 build:
 	env GOOS=linux go build -ldflags="-s -w" -o bin/client-getall 	cmd/client/getall/main.go
 	env GOOS=linux go build -ldflags="-s -w" -o bin/client-create 	cmd/client/create/main.go
 	env GOOS=linux go build -ldflags="-s -w" -o bin/client-regen 	cmd/client/regen/main.go
 
 start:
+	make format
 	make build
 	sls offline --useDocker
 

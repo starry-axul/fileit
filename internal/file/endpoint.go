@@ -9,11 +9,11 @@ type (
 	}
 
 	CreateReq struct {
-		Contect string 
-		Type string
-		Private string
+		Contect  string
+		Type     string
+		Private  string
 		FileName string
-		Token string
+		Token    string
 	}
 
 	GetReq struct {

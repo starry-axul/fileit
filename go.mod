@@ -20,4 +20,5 @@ require (
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.4 // indirect
+	github.com/ncostamagna/gocourse_meta v0.0.1 // indirect
 )

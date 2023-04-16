@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	
+
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/digitalhouse-dev/dh-kit/request"
 	"github.com/digitalhouse-dev/dh-kit/response"
@@ -72,7 +72,7 @@ func decodeRegenHandler(_ context.Context, payload []byte) (interface{}, error) 
 	if err := json.Unmarshal(payload, &event); err != nil {
 		return nil, response.InternalServerError(err.Error())
 	}
-	
+
 	var req client.RegenReq
 	if err := json.Unmarshal([]byte(event.Body), &req); err != nil {
 		return nil, response.BadRequest(err.Error())
@@ -83,7 +83,6 @@ func decodeRegenHandler(_ context.Context, payload []byte) (interface{}, error) 
 	if err := request.DecodeMap(event.PathParameters, &req); err != nil {
 		return nil, response.BadRequest(err.Error())
 	}
-
 
 	return req, nil
 }
